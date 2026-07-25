@@ -1,6 +1,9 @@
+import { API_BASE } from "./config";
+
 export async function assessSite(data) {
+  const base = API_BASE || "";
   const endpoints = [
-    "/api/assess-site",
+    `${base}/api/assess-site`,
     "https://silver-enigma-p7gjqrx66pj7crpgw-8000.app.github.dev/api/assess-site",
   ];
 
