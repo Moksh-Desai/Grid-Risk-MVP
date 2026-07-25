@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.assess import router as assess_router
 from app.api.alternatives import router as alternatives_router
 from app.api.substations import router as substations_router
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 app = FastAPI(
     title="Grid Risk MVP",
@@ -41,7 +44,14 @@ app.include_router(
 
 @app.get("/")
 def root():
+    dist_index = "/workspaces/Grid-Risk-MVP/frontend/dist/index.html"
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index, media_type="text/html")
+
     return {
         "product": "Grid Risk MVP",
         "status": "running"
     }
+
+# Serve frontend production build when available
+app.mount("/", StaticFiles(directory="/workspaces/Grid-Risk-MVP/frontend/dist", html=True), name="frontend")
