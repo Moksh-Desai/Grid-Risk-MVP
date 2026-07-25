@@ -6,8 +6,10 @@ function App() {
   const [technology, setTechnology] = useState("solar");
   const [capacity, setCapacity] = useState(150);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleAnalyze = async () => {
+    setError(null);
     try {
       const response = await assessSite({
         region,
@@ -16,9 +18,9 @@ function App() {
       });
 
       setResult(response);
-    } catch (error) {
-      console.error(error);
-      alert("API request failed");
+    } catch (err) {
+      console.error(err);
+      setError(err.message || String(err));
     }
   };
 
@@ -79,6 +81,12 @@ function App() {
           <p>
             Risk Level: {result.risk_level}
           </p>
+        </div>
+      )}
+      {error && (
+        <div style={{ color: "red" }}>
+          <h3>API Error</h3>
+          <pre>{error}</pre>
         </div>
       )}
     </div>
