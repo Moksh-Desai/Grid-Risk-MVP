@@ -9,4 +9,3 @@ def get_substations(region: str):
     return {
         "region": region
     }
-`

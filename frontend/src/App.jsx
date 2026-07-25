@@ -1,0 +1,88 @@
+import { useState } from "react";
+import { assessSite } from "./api";
+
+function App() {
+  const [region, setRegion] = useState("PJM");
+  const [technology, setTechnology] = useState("solar");
+  const [capacity, setCapacity] = useState(150);
+  const [result, setResult] = useState(null);
+
+  const handleAnalyze = async () => {
+    try {
+      const response = await assessSite({
+        region,
+        technology,
+        capacity_mw: Number(capacity),
+      });
+
+      setResult(response);
+    } catch (error) {
+      console.error(error);
+      alert("API request failed");
+    }
+  };
+
+  return (
+    <div>
+      <h1>Grid Interconnection Risk Analyzer</h1>
+
+      <label>ISO Region</label>
+      <select
+        value={region}
+        onChange={(e) => setRegion(e.target.value)}
+      >
+        <option>PJM</option>
+        <option>MISO</option>
+        <option>SPP</option>
+        <option>ERCOT</option>
+      </select>
+
+      <br />
+      <br />
+
+      <label>Technology</label>
+      <select
+        value={technology}
+        onChange={(e) => setTechnology(e.target.value)}
+      >
+        <option>solar</option>
+        <option>wind</option>
+        <option>storage</option>
+        <option>hybrid</option>
+      </select>
+
+      <br />
+      <br />
+
+      <label>Capacity MW</label>
+      <input
+        type="number"
+        value={capacity}
+        onChange={(e) => setCapacity(e.target.value)}
+      />
+
+      <br />
+      <br />
+
+      <button onClick={handleAnalyze}>
+        Analyze Site
+      </button>
+
+      {result && (
+        <div>
+          <h2>Assessment Result</h2>
+
+          <p>
+            Risk Score: {result.risk_score}
+          </p>
+
+          <p>
+            Risk Level: {result.risk_level}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
