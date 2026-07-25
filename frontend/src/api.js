@@ -1,6 +1,6 @@
 export async function assessSite(data) {
   const response = await fetch(
-    "https://silver-enigma-p7gjqrx66pj7crpgw-8000.app.github.dev/api/assess-site",
+    "http://localhost:8000/api/assess-site",
     {
       method: "POST",
       headers: {
@@ -10,7 +10,11 @@ export async function assessSite(data) {
     }
   );
 
-  const result = await response.json();
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`API error ${response.status}: ${text}`);
+  }
 
+  const result = await response.json();
   return result;
 }

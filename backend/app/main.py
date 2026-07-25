@@ -14,7 +14,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://silver-enigma-p7gjqrx66pj7crpgw-5173.app.github.dev"
+        "https://silver-enigma-p7gjqrx66pj7crpgw-5173.app.github.dev",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
     ],
     allow_credentials=False,
     allow_methods=["*"],
