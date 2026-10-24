@@ -1,19 +1,20 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = (
-    "postgresql://postgres:postgres@localhost/gridrisk"
-)
+from app.config import DATABASE_URL
 
+# SQLite by default; set DATABASE_URL=postgresql://... to use Postgres.
 engine = create_engine(
-    DATABASE_URL
+    DATABASE_URL,
+    connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {},
 )
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+
+def init_db():
+    from app.models import project, substation  # noqa: F401  (register tables)
+
+    Base.metadata.create_all(bind=engine)
