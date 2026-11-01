@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Grid Risk local state (SQLite db + trained models)
+backend/var/
